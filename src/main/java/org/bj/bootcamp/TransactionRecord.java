@@ -42,4 +42,22 @@ public class TransactionRecord {
     public int hashCode() {
         return Objects.hash(transactionDate, amount, balance);
     }
+
+    @Override
+    public String toString() {
+        return transactionDate
+                .concat(" | ")
+                .concat( ((Double) amount).toString() )
+                .concat(" | ")
+                .concat( ((Double) balance).toString() );
+    }
+
+//    @Override
+//    public String toString() {
+//        return "TransactionRecord{" +
+//                "transactionDate='" + transactionDate + '\'' +
+//                ", amount=" + amount +
+//                ", balance=" + balance +
+//                '}';
+//    }
 }

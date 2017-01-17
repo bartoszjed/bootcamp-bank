@@ -11,17 +11,27 @@ public class BankAccountImpl {
 
     private Integer balance;
     private List<TransactionRecord> transactionList = new ArrayList<>();
+    public static String STATEMENT_HEADER = "DATE       | AMOUNT | BALANCE";
 
     public BankAccountImpl() {
         this.balance = 0;
     }
 
-    public BankAccountImpl(Integer balance) {
-        this.balance = balance;
+    public void printStatement() {
+        System.out.println(getStatementContent());
     }
 
-    public String getstatement() {
-        return "DATE   | AMOUNT   | BALANCE";
+    public String getStatementContent(){
+        final String NEW_LINE = System.getProperty("line.separator");
+
+
+        String result = STATEMENT_HEADER;
+
+        for(String line: getTransactionStrings()){
+            result.concat(NEW_LINE);
+            result.concat(line);
+        }
+        return result;
     }
 
     public int getBalance() {
@@ -35,10 +45,18 @@ public class BankAccountImpl {
 
     public void withdraw(int withdrawAmount) {
         balance -= withdrawAmount;
-        this.transactionList.add(new TransactionRecord(LocalDate.now().toString(),withdrawAmount, this.balance));
+        this.transactionList.add(new TransactionRecord(LocalDate.now().toString(),-withdrawAmount, this.balance));
     }
 
     public List<TransactionRecord> getTransactions() {
         return transactionList;
+    }
+
+    public List<String> getTransactionStrings(){
+        List<String> result = new ArrayList<>();
+        for(TransactionRecord element:this.transactionList){
+            result.add(element.toString());
+        }
+        return result;
     }
 }

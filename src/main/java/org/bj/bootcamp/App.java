@@ -4,6 +4,12 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+       BankAccountImpl bankAccount = new BankAccountImpl();
+
+        bankAccount.deposit(1000);
+        bankAccount.withdraw(100);
+        bankAccount.deposit(500);
+
+        bankAccount.printStatement();
     }
 }
