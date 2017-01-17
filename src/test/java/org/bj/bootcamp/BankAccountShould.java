@@ -15,7 +15,7 @@ public class BankAccountShould {
 
  private BankAccountImpl bankAccount;
  private String localDateTime;
- final String NEW_LINE = System.getProperty("line.separator");
+
 
     @Before
     public void setUp() throws Exception {
@@ -96,17 +96,20 @@ public class BankAccountShould {
         expectedResult.add(r2.toString());
         expectedResult.add(r3.toString());
 
-        assertEquals (expectedResult, bankAccount.getTransactionStrings());
+        Statement statement = new Statement(bankAccount.getTransactions());
+        assertEquals (expectedResult, statement.getTransactionStrings());
     }
 
     @Test public void
     get_statement_header_string() {
-        String statementLine = bankAccount.getStatementContent();
-        assertThat(statementLine, is(BankAccountImpl.STATEMENT_HEADER));
+        Statement statement = new Statement(bankAccount.getTransactions());
+        String statementLine = statement.getStatementContent();
+        assertThat(statementLine, is(Statement.STATEMENT_HEADER));
     }
 
     @Test public void
     get_statement_multi_line_content () {
+        Statement statement = new Statement(bankAccount.getTransactions());
 
         int deposit = 1000;
         bankAccount.deposit(deposit);
@@ -117,7 +120,7 @@ public class BankAccountShould {
         TransactionRecord r1 = new TransactionRecord(localDateTime, deposit, deposit);
         TransactionRecord r2 = new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal);
 
-        String expectedStatement = BankAccountImpl.STATEMENT_HEADER + NEW_LINE + r1.toString() + NEW_LINE + r2.toString();
-        assertThat(expectedStatement, is(bankAccount.getStatementContent()));
+        String expectedStatement = Statement.STATEMENT_HEADER + Statement.NEW_LINE + r1.toString() + Statement.NEW_LINE + r2.toString();
+        assertThat(expectedStatement, is(statement.getStatementContent()));
     }
 }

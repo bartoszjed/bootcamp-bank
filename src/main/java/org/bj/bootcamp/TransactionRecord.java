@@ -43,6 +43,8 @@ public class TransactionRecord {
         return Objects.hash(transactionDate, amount, balance);
     }
 
+
+
     @Override
     public String toString() {
         return transactionDate
@@ -52,12 +54,4 @@ public class TransactionRecord {
                 .concat( ((Double) balance).toString() );
     }
 
-//    @Override
-//    public String toString() {
-//        return "TransactionRecord{" +
-//                "transactionDate='" + transactionDate + '\'' +
-//                ", amount=" + amount +
-//                ", balance=" + balance +
-//                '}';
-//    }
 }

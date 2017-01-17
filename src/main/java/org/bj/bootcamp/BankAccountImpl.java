@@ -11,27 +11,14 @@ public class BankAccountImpl {
 
     private Integer balance;
     private List<TransactionRecord> transactionList = new ArrayList<>();
-    public static String STATEMENT_HEADER = "DATE       | AMOUNT | BALANCE";
+
 
     public BankAccountImpl() {
         this.balance = 0;
     }
 
     public void printStatement() {
-        System.out.println(getStatementContent());
-    }
-
-    public String getStatementContent(){
-        final String NEW_LINE = System.getProperty("line.separator");
-
-
-        String result = STATEMENT_HEADER;
-
-        for(String line: getTransactionStrings()){
-            result.concat(NEW_LINE);
-            result.concat(line);
-        }
-        return result;
+        (new Statement(this.transactionList)).print();
     }
 
     public int getBalance() {
@@ -52,11 +39,5 @@ public class BankAccountImpl {
         return transactionList;
     }
 
-    public List<String> getTransactionStrings(){
-        List<String> result = new ArrayList<>();
-        for(TransactionRecord element:this.transactionList){
-            result.add(element.toString());
-        }
-        return result;
-    }
+
 }
