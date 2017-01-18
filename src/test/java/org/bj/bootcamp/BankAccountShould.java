@@ -3,13 +3,19 @@ package org.bj.bootcamp;
 import org.junit.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class BankAccountShould {
 
- private BankAccountImpl bankAccount;
+    public static final int SMALL_AMOUNT = 500;
+    private BankAccountImpl bankAccount;
  private String localDateTime;
 
 
@@ -22,78 +28,66 @@ public class BankAccountShould {
     @Test public void
     increase_balance_by_deposit_amount(){
         int previousBalance = bankAccount.getBalance();
-        int depositAmount = 10;
-        bankAccount.deposit(depositAmount);
+        bankAccount.deposit(SMALL_AMOUNT);
 
-        assertThat(bankAccount.getBalance(), is(previousBalance + depositAmount));
+        assertThat(bankAccount.getBalance(), is(previousBalance + SMALL_AMOUNT));
     }
 
     @Test public void
     decrease_balance_by_withdrawal_amount(){
         int previousBalance = bankAccount.getBalance();
-        int withdrawAmmount = 10;
-        bankAccount.withdraw(withdrawAmmount);
+        bankAccount.withdraw(SMALL_AMOUNT);
 
-        assertThat(bankAccount.getBalance(), is(previousBalance - withdrawAmmount));
+        assertThat(bankAccount.getBalance(), is(previousBalance - SMALL_AMOUNT));
     }
 
     @Test public void
-    generate_transaction_for_deposit_while_start_balance_is_zero(){
-        int deposit = 500;
-        bankAccount.deposit(deposit);
+    generate_transaction_for_deposit(){
+        bankAccount.deposit(SMALL_AMOUNT);
 
-        TransactionRecord expectedResult = new TransactionRecord(localDateTime, deposit, deposit);
-        assertThat(bankAccount.getTransactions().get(0), is(expectedResult));
+        TransactionRecord expectedResult = new TransactionRecord(localDateTime, SMALL_AMOUNT, SMALL_AMOUNT);
+        assertThat(bankAccount.getTransactions(), contains(expectedResult));
     }
 
     @Test public void
     generate_transaction_for_withdrawal_while_start_balance_is_zero(){
-        int withdrawal = 500;
-        bankAccount.withdraw(withdrawal);
+        bankAccount.withdraw(SMALL_AMOUNT);
 
-
-        TransactionRecord expectedResult = new TransactionRecord(localDateTime, -withdrawal, -withdrawal);
-        assertThat(bankAccount.getTransactions().get(0), is(expectedResult));
+        TransactionRecord expectedResult = new TransactionRecord(localDateTime, -SMALL_AMOUNT, -SMALL_AMOUNT);
+        assertThat(bankAccount.getTransactions(), contains(expectedResult));
     }
 
     @Test public void
     generate_transactions_for_multiple_operations(){
-        int deposit = 500;
+        int deposit = 1000;
         bankAccount.deposit(deposit);
-
         int withdrawal = 100;
         bankAccount.withdraw(withdrawal);
+        bankAccount.deposit(SMALL_AMOUNT);
 
-        List<TransactionRecord> expectedResult = new ArrayList<>();
-        expectedResult.add(new TransactionRecord(localDateTime, deposit, deposit));
-        expectedResult.add(new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal));
-
-        assertThat(bankAccount.getTransactions(), is(expectedResult));
+        TransactionRecord r1 = new TransactionRecord(localDateTime, deposit, deposit);
+        TransactionRecord r2 = new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal);
+        TransactionRecord r3 = new TransactionRecord(localDateTime, SMALL_AMOUNT, deposit-withdrawal+ SMALL_AMOUNT);
+        List<TransactionRecord> expectedResult = asList(r1, r2, r3);
+        assertThat(bankAccount.getTransactions(), contains(expectedResult));
     }
 
     @Test public void
     generate_formatted_transactions_for_multiple_operations(){
         int deposit = 1000;
         bankAccount.deposit(deposit);
-
         int withdrawal = 100;
         bankAccount.withdraw(withdrawal);
+        bankAccount.deposit(SMALL_AMOUNT);
 
-        int deposit2 = 500;
-        bankAccount.deposit(deposit2);
-
-        List<String> expectedResult = new ArrayList<>();
         TransactionRecord r1 = new TransactionRecord(localDateTime, deposit, deposit);
         TransactionRecord r2 = new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal);
-        TransactionRecord r3 = new TransactionRecord(localDateTime, deposit2, deposit-withdrawal+deposit2);
+        TransactionRecord r3 = new TransactionRecord(localDateTime, SMALL_AMOUNT, deposit-withdrawal+ SMALL_AMOUNT);
 
-        expectedResult.add(r1.toString());
-        expectedResult.add(r2.toString());
-        expectedResult.add(r3.toString());
+        List<String> expectedResult = asList(r1.toString(), r2.toString(), r3.toString());
 
         Statement statement = new Statement(bankAccount.getTransactions());
-        //assertEquals (expectedResult, statement.getTransactionStrings());
-        assertThat(expectedResult, is(statement.getTransactionStrings()));
+        assertThat(statement.getTransactionStrings(), contains(expectedResult));
     }
 
     @Test public void

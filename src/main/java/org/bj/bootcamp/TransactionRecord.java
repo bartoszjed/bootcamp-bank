@@ -45,13 +45,22 @@ public class TransactionRecord {
 
 
 
+//    @Override
+//    public String toString() {
+//        return transactionDate
+//                .concat(" | ")
+//                .concat( ((Double) amount).toString() )
+//                .concat(" | ")
+//                .concat( ((Double) balance).toString() );
+//    }
+
+
     @Override
     public String toString() {
-        return transactionDate
-                .concat(" | ")
-                .concat( ((Double) amount).toString() )
-                .concat(" | ")
-                .concat( ((Double) balance).toString() );
+        return "TransactionRecord{" +
+                "date='" + transactionDate + '\'' +
+                ", amount=" + amount +
+                ", balance=" + balance +
+                '}';
     }
-
 }

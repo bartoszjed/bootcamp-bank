@@ -31,8 +31,7 @@ public class BankAccountImpl {
     }
 
     public void withdraw(int withdrawAmount) {
-        balance -= withdrawAmount;
-        this.transactionList.add(new TransactionRecord(LocalDate.now().toString(),-withdrawAmount, this.balance));
+        deposit(-withdrawAmount);
     }
 
     public List<TransactionRecord> getTransactions() {
