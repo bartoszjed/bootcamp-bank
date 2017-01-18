@@ -21,9 +21,6 @@ public class Statement {
     }
 
     public String getStatementContent(){
-        final String NEW_LINE = System.getProperty("line.separator");
-
-
         String result = Statement.STATEMENT_HEADER;
 
         for(String line: getTransactionStrings()){
@@ -34,9 +31,7 @@ public class Statement {
     }
 
     public void print() {
-        System.out.println(
-                this.transactionList.stream()
-                .sorted()
+        System.out.println(getStatementContent()
         );
     }
 }

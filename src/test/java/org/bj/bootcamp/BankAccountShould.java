@@ -1,15 +1,11 @@
 package org.bj.bootcamp;
 
 import org.junit.*;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
 
 public class BankAccountShould {
 
@@ -47,7 +43,7 @@ public class BankAccountShould {
         bankAccount.deposit(deposit);
 
         TransactionRecord expectedResult = new TransactionRecord(localDateTime, deposit, deposit);
-        assertEquals (expectedResult, bankAccount.getTransactions().get(0));
+        assertThat(bankAccount.getTransactions().get(0), is(expectedResult));
     }
 
     @Test public void
@@ -57,7 +53,7 @@ public class BankAccountShould {
 
 
         TransactionRecord expectedResult = new TransactionRecord(localDateTime, -withdrawal, -withdrawal);
-        assertEquals (expectedResult, bankAccount.getTransactions().get(0));
+        assertThat(bankAccount.getTransactions().get(0), is(expectedResult));
     }
 
     @Test public void
@@ -72,8 +68,7 @@ public class BankAccountShould {
         expectedResult.add(new TransactionRecord(localDateTime, deposit, deposit));
         expectedResult.add(new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal));
 
-
-        assertEquals (expectedResult, bankAccount.getTransactions());
+        assertThat(bankAccount.getTransactions(), is(expectedResult));
     }
 
     @Test public void
@@ -97,14 +92,15 @@ public class BankAccountShould {
         expectedResult.add(r3.toString());
 
         Statement statement = new Statement(bankAccount.getTransactions());
-        assertEquals (expectedResult, statement.getTransactionStrings());
+        //assertEquals (expectedResult, statement.getTransactionStrings());
+        assertThat(expectedResult, is(statement.getTransactionStrings()));
     }
 
     @Test public void
     get_statement_header_string() {
         Statement statement = new Statement(bankAccount.getTransactions());
         String statementLine = statement.getStatementContent();
-        assertThat(statementLine, is(Statement.STATEMENT_HEADER));
+        assertThat(Statement.STATEMENT_HEADER, is(statementLine));
     }
 
     @Test public void
@@ -121,6 +117,6 @@ public class BankAccountShould {
         TransactionRecord r2 = new TransactionRecord(localDateTime, -withdrawal, deposit-withdrawal);
 
         String expectedStatement = Statement.STATEMENT_HEADER + Statement.NEW_LINE + r1.toString() + Statement.NEW_LINE + r2.toString();
-        assertThat(expectedStatement, is(statement.getStatementContent()));
+        assertThat(statement.getStatementContent(), is(expectedStatement));
     }
 }
